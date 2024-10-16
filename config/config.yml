@@ -1,0 +1,73 @@
+paths:
+    root: / # /path/to/root
+    data: data # /path/to/data
+data:
+    augmentation: True
+
+model_ckpt:
+    use_ckpt: False # continue training from checkpoint or prediction
+    ckpt_path: checkpoints # /path/to/checkpoint
+    run_id: dxccnzjr # /best_run_id
+
+logging:
+    project: dem-rts-segmentation
+    name: unetplusplus
+    save_dir: /home/maierk/cds/working/Kathrin/deep_learning_data/wandb_logging #/path/to/wandb_logging
+    log_model: True
+
+module:
+    model: UnetPlusPlus # Unet, UnetPlusPlus, DeepLabV3Plus
+    backbone: resnet18 # resnet18, resnet50
+    weights: imagenet # empty (None), imagenet
+    use_batchnorm: True
+    loss: DiceLoss
+    loss_smooth: 0.05
+    num_channels: 4
+    num_classes: 1
+    learning_rate: 1e-4
+    optimizer: AdamW # Adam, AdamW, SGD
+    lr_scheduler: CosineAnnealingWarmRestarts # ExponentialLR, StepLR, CosineAnnealingWarmRestarts, ReduceLROnPlateau
+    weight_decay: 1e-2
+    amsgrad: False
+    momentum: 0.9 
+    gamma: 0.5 
+    step_size: 10
+    T_0: 5
+    T_mult: 1 
+    patience: 10
+    min_lr: 1e-8 
+    cooldown: 0 
+    freeze_backbone: False
+
+datamodule:
+    batch_size: 8
+    num_workers: 1
+    img_size: 512
+    trainset_length: 3000
+
+trainer:
+    deterministic: False
+    max_epochs: 200
+    accelerator: gpu
+    log_every_n_steps: 10
+    check_val_every_n_epoch: 1
+    fast_dev_run: False
+    num_sanity_val_steps: 0
+
+callbacks:
+    lr_monitor:
+      logging_interval: step
+    earlystop:
+      patience: 50
+      mode: max
+      monitor: val_iou
+      min_delta: 1e-8
+      verbose: True
+    checkpoint:
+      filename: "{epoch:02d}-{val_iou:.2f}-{val_loss:.2f}"
+      save_top_k: 1
+      monitor: val_iou
+      mode: max
+      every_n_epochs: 1
+      save_last: False
+      verbose: True
