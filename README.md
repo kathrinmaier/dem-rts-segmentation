@@ -1,8 +1,15 @@
-# dem-rts-segmentation [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) {ignore=true}
+# dem-rts-segmentation [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 This is the repository to the publication "Detecting Mass Wasting of Retrogressive Thaw Slumps in Spaceborne Elevation Models using Deep Learning" by Kathrin Maier, Philipp Bernhard, Sophia Ly, Michele Volpi, Ingmar Nitze, Shiyi Li, and Irena Hajnsek.
 
-## Table of Contents {ignore=true}
-[TOC]
+
+- [dem-rts-segmentation ](#dem-rts-segmentation-)
+  - [General](#general)
+  - [Dataset](#dataset)
+  - [Usage](#usage)
+    - [Training / Testing / Inference](#training--testing--inference)
+    - [Postprocessing](#postprocessing)
+    - [Performance assessment](#performance-assessment)
+  - [Authors](#authors)
 
 ## General
 We use binary semantic segmentation based on commonly used Deep Learning models (UNet, UNet++, and DeepLabV3+ from the Python libray [segmentation-models-pytorch](https://github.com/qubvel-org/segmentation_models.pytorch)) to detect mass wasting from Retregressive Thaw Slumps (RTSs) on difference images of time-series Digital Elevation Models (DEM). We implemented our pipeline based on [Pytorch](https://pytorch.org/).
@@ -47,12 +54,3 @@ We implemented a [postprocessing](postprocess) routine to decrease the number of
 ## Authors
 [@kathrinmaier](https://www.github.com/kathrinmaier), contact information: maierk@ethz.ch
 
-## License
-The MIT License ([MIT](https://choosealicense.com/licenses/mit/))
-Copyright (c) 2015 Chris Kibble
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
