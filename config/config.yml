@@ -3,7 +3,6 @@ paths:
     data: data # /path/to/data
 data:
     augmentation: True
-
 model_ckpt:
     use_ckpt: False # continue training from checkpoint or prediction
     ckpt_path: checkpoints # /path/to/checkpoint
@@ -12,7 +11,7 @@ model_ckpt:
 logging:
     project: dem-rts-segmentation
     name: unetplusplus
-    save_dir: /home/maierk/cds/working/Kathrin/deep_learning_data/wandb_logging #/path/to/wandb_logging
+    save_dir: wandb_logging #/path/to/logging
     log_model: True
 
 module:

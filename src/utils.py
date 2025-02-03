@@ -106,30 +106,27 @@ def save_results(count, y_hat_hard, batch, result_dir, stage):
             with rasterio.open(result_file, 'w', **meta) as dst:
                 dst.write(y_hat_array)
         elif stage == 'predict':
-            if y_hat_array.shape == (1, 1056, 1056):
-                clip_margin = 0 # 28
-                clip_size = 0 # 280
-                width = y_hat_array.shape[2]-(2*clip_margin)
-                height = y_hat_array.shape[1]-(2*clip_margin)
-                meta = {
-                    "driver": "GTiff",
-                    "count": 1,
-                    "height": height,
-                    "width": width,
-                    "crs": batch["crs"][i],
-                    "transform": rasterio.transform.from_bounds(west=bbox[0].item()+clip_size, 
-                                                                south=bbox[2].item()+clip_size, 
-                                                                east=bbox[1].item()-clip_size, 
-                                                                north=bbox[3].item()-clip_size, 
-                                                                width=width, 
-                                                                height=height),
-                    "dtype": y_hat_array.dtype,
-                }
-                with rasterio.open(result_file, 'w', **meta) as dst:
-                    #dst.write(y_hat_array[:, clip_margin:-clip_margin, clip_margin:-clip_margin])
-                    dst.write(y_hat_array[:, :, :])
-            else:
-                raise ValueError("Use image size 1056 for prediction!")
+            clip_margin = 0 # 28
+            clip_size = 0 # 280
+            width = y_hat_array.shape[2]-(2*clip_margin)
+            height = y_hat_array.shape[1]-(2*clip_margin)
+            meta = {
+                "driver": "GTiff",
+                "count": 1,
+                "height": height,
+                "width": width,
+                "crs": batch["crs"][i],
+                "transform": rasterio.transform.from_bounds(west=bbox[0].item()+clip_size, 
+                                                            south=bbox[2].item()+clip_size, 
+                                                            east=bbox[1].item()-clip_size, 
+                                                            north=bbox[3].item()-clip_size, 
+                                                            width=width, 
+                                                            height=height),
+                "dtype": y_hat_array.dtype,
+            }
+            with rasterio.open(result_file, 'w', **meta) as dst:
+                #dst.write(y_hat_array[:, clip_margin:-clip_margin, clip_margin:-clip_margin])
+                dst.write(y_hat_array[:, :, :])
 
     return count
                 

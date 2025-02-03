@@ -7,23 +7,22 @@ import postprocess.utils as util
 import postprocess.mass_wasting as mass_wasting
 
 
-ROOT = "/data"
+ROOT = "/data/predict"
 TEMP = "/temp"
-DATA = "/data/model_output"
 
 def main():
     ini_location = 'postprocess/postprocess.ini'
     process_dict = util.get_config_dict(filename=ini_location,
                                             section='general')
     crs = int(process_dict['crs'])
-    os.makedirs(f"{ROOT}/postprocessed/{process_dict['run_id']}", exist_ok=True)
+    os.makedirs(f"{ROOT}/postprocess/{process_dict['run_id']}", exist_ok=True)
     name = f"{process_dict['year_start']}_{process_dict['year_end']}"               
-    polygon_gdf, tile_gdf = preprare_predictions(f"{ROOT}/{process_dict['run_id']}/{name}", process_dict)
-    polygon_gdf, polygons_to_remove = mass_wasting.calculate_polygon_attributes(process_dict, polygon_gdf, TEMP, DATA)
-    polygon_gdf.to_file(f"{ROOT}/postprocessed/{process_dict['run_id']}/polygons_plain_{name}.geojson", driver="GeoJSON", crs=f"EPSG:{crs}")
+    polygon_gdf, tile_gdf = preprare_predictions(f"{ROOT}/model_outputs/{process_dict['run_id']}", process_dict)
+    polygon_gdf, polygons_to_remove = mass_wasting.calculate_polygon_attributes(process_dict, polygon_gdf, TEMP, f"{ROOT}/images")
+    polygon_gdf.to_file(f"{ROOT}/postprocess/{process_dict['run_id']}/polygons_prediction_plain_{name}.geojson", driver="GeoJSON", crs=f"EPSG:{crs}")
     polygon_gdf = polygon_gdf.drop(polygons_to_remove)
-    polygon_gdf.to_file(f"{ROOT}/postprocessed/{process_dict['run_id']}/polygons_postprocessed_{name}.geojson", driver="GeoJSON", crs=f"EPSG:{crs}")
-    tile_gdf.to_file(f"{ROOT}/postprocessed/{process_dict['run_id']}/tiles_{name}.geojson", driver="GeoJSON", crs=f"EPSG:{crs}")
+    polygon_gdf.to_file(f"{ROOT}/postprocess/{process_dict['run_id']}/polygons_prediction_postprocessed_{name}.geojson", driver="GeoJSON", crs=f"EPSG:{crs}")
+    tile_gdf.to_file(f"{ROOT}/postprocess/{process_dict['run_id']}/tiles_{name}.geojson", driver="GeoJSON", crs=f"EPSG:{crs}")
     return
 
 def preprare_predictions(predict_path, process_dict):

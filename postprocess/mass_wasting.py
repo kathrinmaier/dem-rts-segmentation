@@ -76,17 +76,13 @@ def add_attributes(diff_dem_objects, polygon, time_span):
 
 def postprocess_polygon(polygon, diff_dem_list):
     remove = False
-    water_contained = any(util.is_contained_in_mask(polygon, diff_dem["watermask"], 0.2) for diff_dem in diff_dem_list)
-    sar_contained = any(util.is_contained_in_mask(polygon, diff_dem["sar_mask"], 0.5) for diff_dem in diff_dem_list)
+    water_contained = any(util.is_contained_in_mask(polygon, diff_dem["watermask"], 0.5) for diff_dem in diff_dem_list)
+    sar_contained = any(util.is_contained_in_mask(polygon, diff_dem["sarmask"], 0.5) for diff_dem in diff_dem_list)
     if water_contained or sar_contained or polygon.area <= 1000:
         remove = True
     return remove
 
 def calculate_polygon_attributes(process_dict, gdf, temp_path, data_path):
-    tmp_txt_file_dict = {}
-    for temp_txt_file in ['soc_mishra', 'soc_wang', 'alt', 'gi']:
-        tmp_txt_file_dict[temp_txt_file] = f"{temp_path}/attribute_{process_dict['year_start']}_{process_dict['year_end']}_{temp_txt_file}.txt"
-
     crs = int(process_dict['crs'])
     time_span = int(process_dict["year_end"]) - int(process_dict["year_start"])
     polygons_to_remove = []
@@ -104,7 +100,7 @@ def calculate_polygon_attributes(process_dict, gdf, temp_path, data_path):
                 diff_dem_dict[key_temp] = f"{data_path}/{filename}"
         updated_diff_dem_list.append(diff_dem_dict)
         
-        stats = add_attributes(updated_diff_dem_list, polygon, tmp_txt_file_dict, process_dict, time_span=time_span, crs=crs)  
+        stats = add_attributes(updated_diff_dem_list, polygon, time_span=time_span)  
 
         if stats is None or polygon is None:
             print("Problem with height calculation.")

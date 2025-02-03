@@ -5,7 +5,6 @@ import postprocess.mass_wasting as mass_wasting
 
 ROOT = "/data"
 TEMP = "/temp"
-DATA = "test"
 
 def main():
     ini_location = 'postprocess/postprocess.ini'
@@ -18,12 +17,12 @@ def main():
     os.makedirs(f"{ROOT}/validation", exist_ok=True)
 
     name = f"{year_start}_{year_end}"
-    polygon_gdf = gpd.read_file(f"{ROOT}/{DATA}/polygons_{year_start}_{year_end}.geojson", crs=f"EPSG:{crs}")
-    polygon_gdf, polygons_to_remove = mass_wasting.calculate_polygon_attributes(process_dict, polygon_gdf, TEMP, DATA)
+    polygon_gdf = gpd.read_file(f"{ROOT}/test/polygons/polygons_reference.geojson", crs=f"EPSG:{crs}")
+    polygon_gdf, polygons_to_remove = mass_wasting.calculate_polygon_attributes(process_dict, polygon_gdf, TEMP, f"{ROOT}/test/images")
 
-    polygon_gdf.to_file(f"{ROOT}/validation/polygons_plain_{name}.geojson", driver="GeoJSON", crs=f"EPSG:{crs}")
+    polygon_gdf.to_file(f"{ROOT}/compare/validation/polygons_plain_{name}.geojson", driver="GeoJSON", crs=f"EPSG:{crs}")
     polygon_gdf = polygon_gdf.drop(polygons_to_remove)
-    polygon_gdf.to_file(f"{ROOT}/validation/polygons_postprocessed_{name}.geojson", driver="GeoJSON", crs=f"EPSG:{crs}")
+    polygon_gdf.to_file(f"{ROOT}/compare/validation/polygons_postprocessed_{name}.geojson", driver="GeoJSON", crs=f"EPSG:{crs}")
     return
 
 if __name__ == "__main__":

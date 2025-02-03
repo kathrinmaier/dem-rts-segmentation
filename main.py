@@ -27,9 +27,9 @@ def main(cfg, mode):
         augmentations = None
 
     if cfg.model_ckpt.use_ckpt:
-        ckpt_path = f"{cfg.paths.root}/{cfg.model_ckpt.ckpt_path}/{cfg.model_ckpt.run_id}/checkpoints"
+        ckpt_path = f"{cfg.paths.root}/{cfg.model_ckpt.ckpt_path}/{cfg.model_ckpt.run_id}"
         ckpt_file = os.listdir(ckpt_path)[0]
-        result_dir = f"{cfg.paths.root}_{cfg.model_ckpt.run_id}"
+        result_dir = f"{cfg.paths.root}/data/predict/model_outputs/{cfg.model_ckpt.run_id}"
         os.makedirs(result_dir, exist_ok=True)
         model = SegmentationModel.load_from_checkpoint(f"{ckpt_path}/{ckpt_file}", result_dir=result_dir)
     else:
@@ -56,10 +56,6 @@ def main(cfg, mode):
 
     wandb.finish()
     return
-
-
-
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
